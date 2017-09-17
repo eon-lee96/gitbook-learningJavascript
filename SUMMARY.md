@@ -8,7 +8,7 @@
         * [不改变原数组的](Array/README.md)
             * [concat](Array/README.md#concat)
             * [includes](Array/README.md#includes)
-            * [indexOf](Array/README.md#indexoof)
+            * [indexOf](Array/README.md#indexof)
             * [join](Array/README.md#join)
             * [lastIndexOf](Array/README.md#lastindexof)
             * [slice](Array/README.md#slice)
