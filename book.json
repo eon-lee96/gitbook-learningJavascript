@@ -1,5 +1,6 @@
 {
     "title": "JavaScript基础学习 by lee1hang",
     "description": "学习JavaScript基础的笔记",
-    "author": "lee1hang"
+    "author": "lee1hang",
+    "plugins": ["toggle-chapters"]
 }
