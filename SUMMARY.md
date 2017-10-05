@@ -2,7 +2,7 @@
 
 * [介绍](README.md)
 * [Array](Array/README.md#前言)
-    * [一些概念与理解](Array/README.md)
+    * [一些概念与理解](Array/README.md#前言)
     * [数组创建](Array/README.md#数组创建)
     * [数组方法](Array/README.md#数组方法)
         * [不改变原数组的](Array/README.md)
@@ -22,3 +22,9 @@
             * [shift](Array/README.md#shift)
             * [sort](Array/README.md#sort)
             * [splice](Array/README.md#splice)
+            * [unshift](Array/README.md#unshift)
+        * [迭代方法](Array/README.md)
+            * [概念](Array/README.md#迭代方法)
+            * [entries](Array/README.md#entries)
+            * [every](Array/README.md#every)
+            * [filter](Array/README.md#filter)

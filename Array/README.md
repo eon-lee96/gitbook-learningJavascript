@@ -417,6 +417,16 @@ var arr2=[7,5,4,6]
 arr2.sort((a,b)=>b-a)
 arr2 //[7,6,5,4]
 ```
+如果对`sort`进行函数传参的话，需要知道，`sort`在比较的时候是取两个数来比较。也就是取两个数当做函数的参数进行处理，处理原则是：假设第一个参数要在前，返回小于0的值，如果第二个参数在前，返回大于0的值，两个值顺序无关相等，就返回0。
+
+大到小排序：
+```javascript
+var arr = [1, 2, 3]
+arr.sort((a, b) => {
+    return b - a
+})
+arr //[3,2,1]
+```
 
 *ECMAScript 3*
 
@@ -424,10 +434,210 @@ arr2 //[7,6,5,4]
 
 ### splice
 
-通过删除现有元素/添加新元素来更改数组的内容。
+通过删除现有元素/添加新元素来更改数组的内容。返回一个由删除元素组成的数组。
 
-接收多个参数，前两个固定分别为`start`删除开始的位置,`deleteCount要删除的个数。
+接收多个参数，前两个固定分别为`start`删除开始的位置,`deleteCount`要删除的个数。
 
 之后的参数是插入在删除后位置的元素`item`
 
+`deleteCount`为空就是删除`start`到数组结束。
+
+删除指定位置的元素
+
+```javascript
+var arr = [0,1,2,3,4,5]
+var b = arr.splice(3,1)
+b //[3]
+arr // [0,1,2,4,5]
+```
+
+不删除元素而在指定的位置插入新元素
+
+```javascript
+var arr = [0,1,2,3,4,5]
+arr.splice(1,0,2,2)
+arr //[0, 2, 2, 1, 2, 3, 4, 5]
+```
+
+可以发现插入是在指定的位置前插入的。
+*ECMAScript 3*
+
+### unshift
+
+将一个或多个元素添加到数组的开头，并返回数组的新长度。与`shift`相反与`push`类似
+
+```javascript
+var arr = [1,2,3,4,5]
+var b = arr.unshift(0)
+arr //[0, 1, 2, 3, 4, 5]
+b //6
+```
+
+*ECMAScript 3*
+
+## 迭代方法
+
+所谓迭代方法其实就是一些会迭代遍历数组元素，并对其进行操作的方法.
+
+众多遍历方法中，有很多方法都需要指定一个回调函数作为参数。在回调函数执行之前，数组的长度会被缓存在某个地方，所以，如果你在回调函数中为当前数组添加了新的元素，那么那些新添加的元素是不会被遍历到的。此外，如果在回调函数中对当前数组进行了其它修改，比如改变某个元素的值或者删掉某个元素，那么随后的遍历操作可能会受到未预期的影响。总之，不要尝试在遍历过程中对原数组进行任何修改，虽然规范对这样的操作进行了详细的定义，但为了可读性和可维护性，请不要这样做。
+
+大多数的遍历方法的第一个参数接收一个函数，并且对数组的每个元素调用一次该函数。如果是稀疏数组，对不存在的元素不调用传递的函数。
+
+多数情况下，传递函数调用时会被传入三个参数：数组元素，元素索引，数组本身。
+
+另外，大部分遍历方法除了接收第一个参数传递函数外，还会接收第二个参数。如果存在第二个参数，那么传递函数的调用者就是第二个参数，被看做是第二个参数的方法，也就是`this`值。
+
+遍历方法都不会改变数组内容，然而传递函数可以改变数组的内容。
+
+***
+
+### entries
+
+返回一个新的数组迭代对象，该对象包含数组中每个索引的键/值对。
+
+也就是说返回的迭代对象的值是一个数组，这个数组的第一个元素是键，第二个元素是值
+
+关于迭代对象的知识，后续继续学习。
+
+```javascript
+var arr = ['a','b','c']
+var iterator = arr.entries()
+
+console.log(iterator.next().value); // [0, 'a']
+console.log(iterator.next().value); // [1, 'b']
+console.log(iterator.next().value); // [2, 'c']
+```
+
+*ECMAScript 2015*
+
+***
+
+### every
+
+测试数组中的所有元素是否通过提供的函数实现的测试准则。
+
+其实就是将数组里的每个元素丢进提供的传递函数，对每个元素进行测试，看是否符合自定的规则。
+
+每个方法对数组中存在的每个元素执行一次提供的回调函数，直到找到一个回调函数返回一个`falsy`值。如果找到这样一个元素，那么每个方法都会立即返回`false`。立即的意思就是不再执行下去。否则，如果每次传递函数都返回真实值，则每个都返回`true`。仅对具有赋值的数组的索引调用回调函数;对于已被删除或从未被赋值的索引，不会调用它。
+
+```javascript
+function test(a) {
+    console.log(a)
+    if (a > 5)
+        return true
+    else
+        return false
+}
+
+var arr = [6, 1, 8, 9]
+var result = arr.every(test) // 6,1
+console.log(result) //result
+```
+
+如果没有返回值就是默认返回`falsy`
+
+```javascript
+function test2(a) {
+    console.log(a)
+}
+var arr = [1, 2, 3, 4, 5]
+var result = arr.every(test2)//1
+console.log(result)//false
+```
+
+```javascript
+function test3(a) {
+    console.log(a)
+    if (a > 0)
+        return true
+}
+var arr = [1, 2, 3, 4, 5]
+var result = arr.every(test3) //1,2,3,4,5
+console.log(result) // true
+```
+
+如果是空数组默认返回`true`
+
+```javascript
+function test(a) {
+    console.log(a)
+    return false
+}
+var arr = []
+var result = arr.every(test)
+console.log(result) //true
+```
+
+接受的参数如同[概念](Array/README.md#迭代方法)所说
+
+Polyfill
+
+```javascript
+if (!Array.prototype.every) {
+  Array.prototype.every = function(callbackfn, thisArg) {
+    'use strict';
+    var T, k;
+
+    if (this == null) {
+      throw new TypeError('this is null or not defined');
+    }
+
+    //强制把调用者变成对象。
+    //TODO:后续学习Object方法
+    var O = Object(this);
+
+    //获取调用对象的length属性，并通过位运算转成int32，转成补码，然后二进制转10进制
+    //TODO:后续学习位运算
+    var len = O.length >>> 0;
+
+   //确保第一个参数是回调函数
+    if (typeof callbackfn !== 'function') {
+      throw new TypeError();
+    }
+
+    //如果提供了this参数，让T等于它
+    if (arguments.length > 1) {
+      T = thisArg;
+    }
+
+    //计数器
+    k = 0;
+
+    //k<len 循环
+    while (k < len) {
+
+      var kValue;
+
+    //只检测有赋值部分 
+      if (k in O) {
+
+        //提取数组元素
+        kValue = O[k];
+
+        //调用传递函数，获取结果
+        //传参，T为调用者，不传就是undefined，kValue当前数组元素，k索引，O当前数组
+        var testResult = callbackfn.call(T, kValue, k, O);
+
+        //测试结果是错误的就中断，并返回错误。
+        //是真的就继续咯
+        if (!testResult) {
+          return false;
+        }
+      }
+      k++;
+    }
+    return true;
+  };
+}
+```
+
+*ECMAScript 5*
+
+
+### filter
+
+
+
 # 常见问题
+
+
